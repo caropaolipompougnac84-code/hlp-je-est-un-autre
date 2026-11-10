@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Je est un autre ? Les métamorphoses du moi · HLP Terminale</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--encre:#1f2a44;--bordeaux:#7a1f2b;--or:#b8860b;--papier:#ffffff;--gris:#5b6070;--ligne:#e3ddd0;--prof:#eef4ec;--profbord:#4f7a4a}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Source Sans 3",sans-serif;background:var(--papier);color:var(--encre);line-height:1.6;font-size:17px}
+header{background:var(--encre);color:#fff;padding:28px 20px 22px}
+header h1{font-family:"Cormorant Garamond",serif;font-size:2.1rem;margin:0 0 4px;line-height:1.15}
+header p{margin:0;opacity:.85}
+.barre{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 20px;background:#fff;border-bottom:1px solid var(--ligne);position:sticky;top:0;z-index:5}
+.mode{display:flex;border:2px solid var(--encre);border-radius:30px;overflow:hidden}
+.mode button{border:0;background:#fff;padding:7px 16px;font-weight:700;cursor:pointer;font-family:inherit;color:var(--encre)}
+.mode button.actif{background:var(--encre);color:#fff}
+.btn{border:1px solid var(--ligne);background:#fff;border-radius:8px;padding:7px 12px;cursor:pointer;font-family:inherit;font-size:.9rem}
+.onglets{display:flex;flex-wrap:wrap;gap:6px;padding:12px 20px;background:#f3eee3;border-bottom:1px solid var(--ligne)}
+.onglet{display:flex;align-items:center;background:#fff;border:1px solid var(--ligne);border-radius:8px;overflow:hidden}
+.onglet button.ouvrir{border:0;background:none;padding:8px 12px;cursor:pointer;font-family:inherit;font-weight:600;color:var(--encre);font-size:.92rem}
+.onglet button.fermer{border:0;border-left:1px solid var(--ligne);background:none;padding:8px 9px;cursor:pointer;color:var(--gris)}
+.onglet.actif{border-color:var(--bordeaux)}
+.onglet.actif button.ouvrir{background:var(--bordeaux);color:#fff}
+.cache{display:none!important}
+#reafficher{padding:10px 20px;background:#fff8e6;border-bottom:1px solid var(--ligne);font-size:.92rem}
+#reafficher button{margin:3px}
+main{max-width:900px;margin:0 auto;padding:26px 20px 60px}
+section.panneau{display:none}
+section.panneau.visible{display:block}
+h2{font-family:"Cormorant Garamond",serif;font-size:1.9rem;color:var(--bordeaux);margin:0 0 10px}
+h3{font-size:1.15rem;margin:26px 0 6px}
+h4{margin:16px 0 4px}
+.carte{background:#fff;border:1px solid var(--ligne);border-radius:12px;padding:16px 18px;margin:14px 0}
+.texte{background:#fff;border-left:4px solid var(--or);padding:14px 18px;margin:14px 0;font-family:"Cormorant Garamond",serif;font-size:1.18rem;line-height:1.55}
+.texte .source{display:block;font-family:"Source Sans 3",sans-serif;font-size:.85rem;color:var(--gris);margin-top:8px}
+.prof{background:var(--prof);border:1px dashed var(--profbord);border-radius:10px;padding:12px 16px;margin:12px 0}
+.prof::before{content:"Version professeur";display:block;font-weight:700;color:var(--profbord);font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+body.eleve .corr-body{display:none} body.eleve .corrige.ouvert .corr-body{display:block}
+.pont{background:#f4eef8;border-left:4px solid #6a4a8a;border-radius:8px;padding:12px 16px;margin:14px 0}
+.pont::before{content:"Pour aller plus loin";display:block;font-weight:700;color:#6a4a8a;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.95rem;background:#fff}
+th,td{border:1px solid var(--ligne);padding:8px 10px;vertical-align:top;text-align:left}
+th{background:#f3eee3}
+.tableau-art{display:block;background:#fff;border:1px solid var(--ligne);border-radius:10px;padding:12px 14px;margin:8px 0;text-decoration:none;color:var(--encre)}
+.tableau-art strong{color:var(--bordeaux)}
+.tableau-art span{display:block;color:var(--gris);font-size:.9rem}
+a{color:var(--bordeaux)}
+.consigne{font-weight:600}
+ol li,ul li{margin:4px 0}
+
+body{background:#ffffff}
+:root{--papier:#ffffff}
+.rubriques{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:14px 0 18px}
+.rubriques div{background:#fff;border:1px solid var(--ligne);border-left:4px solid #1f6f50;border-radius:10px;padding:10px 14px;font-size:16px;line-height:1.5}
+.rubriques b{display:block;font-family:"Cormorant Garamond",serif;font-size:1.2rem;margin-bottom:4px;color:var(--encre)}
+.meteo{background:#faf5fc;border:1px solid #e3d3ea;border-radius:10px;padding:14px 16px;margin:14px 0}
+.meteo h3{margin:0 0 8px;font-size:1.05rem;color:#5b2d6e}
+.meteo .choix{display:flex;flex-wrap:wrap;gap:6px}
+.meteo .choix button{background:#fff;border:1px solid #d9c6e2;border-radius:10px;padding:7px 12px;cursor:pointer;font-family:inherit;font-weight:600}
+.meteo .choix button.sel{background:#5b2d6e;color:#fff;border-color:#5b2d6e}
+.rep-global{display:inline-flex;align-items:center;gap:0;border:2px solid var(--encre);border-radius:10px;overflow:hidden;background:#fff;margin:8px 0 12px;flex-wrap:wrap}
+.rep-global>span{padding:8px 12px;font-size:.9rem;font-weight:700}
+.rep-global button{border:0;border-left:2px solid var(--encre);background:#fff;padding:10px 14px;min-height:42px;font-family:inherit;font-weight:700;cursor:pointer;margin:0;border-radius:0}
+.rep-global button:hover{background:#f3eee3}
+.corrige{margin-top:12px}
+.paire-rep{display:inline-flex;flex-wrap:wrap;gap:0;margin-top:8px;border:2px solid var(--encre);border-radius:10px;overflow:hidden}
+.paire-rep button{font-family:inherit;font-size:.95rem;font-weight:700;padding:10px 14px;min-height:42px;border:0;cursor:pointer;background:#fff;color:var(--encre);margin:0;border-radius:0}
+.paire-rep button+button{border-left:2px solid var(--encre)}
+.corrige:not(.ouvert) .rep-off,.corrige.ouvert .rep-on{background:var(--encre);color:#fff}
+.corr-body{display:none;margin-top:10px;background:#eaf3ef;border:1px solid #c6ddd3;border-radius:10px;padding:12px 16px}
+.corrige.ouvert .corr-body{display:block}
+body.eleve .corrige{display:block}
+figure.illust{margin:16px 0;background:#fff;border:1px solid var(--ligne);border-radius:12px;overflow:hidden}
+figure.illust img{display:block;width:100%;max-height:420px;object-fit:contain;background:#f5f2ea}
+figure.illust figcaption{padding:10px 14px;font-size:.9rem;color:var(--gris);line-height:1.45}
+figure.illust figcaption strong{color:var(--encre);display:block;margin-bottom:2px}
+.duo-art{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:640px){.duo-art{grid-template-columns:1fr}}
+@media(max-width:390px){body{font-size:16px}header h1{font-size:1.6rem}.rubriques{grid-template-columns:1fr}}
+footer.droits{max-width:900px;margin:0 auto;padding:24px 20px 40px;font-size:.85rem;color:var(--gris);text-align:center;border-top:1px solid var(--ligne)}
+
+@media print{.barre,.onglets,#reafficher,.rep-global,.paire-rep,.meteo{display:none}section.panneau{display:block!important;page-break-after:always}}
+</style>
+</head>
+<body>
+<header>
+<h1>Je est un autre ? Les métamorphoses du moi</h1>
+<p><strong>HLP Terminale</strong> · « La recherche de soi » · « Les métamorphoses du moi » · BO spécial n° 8 du 25 juillet 2019</p>
+</header>
+
+<div class="barre">
+<div class="mode"><button id="bProf" class="actif">Version prof</button><button id="bEleve">Version élève</button></div>
+<button class="btn" id="toutAfficherOnglets">Réafficher tous les onglets</button>
+<div class="rep-global" role="group" aria-label="Réponses"><span>Réponses :</span><button type="button" id="toutAfficher">Tout afficher</button><button type="button" id="toutCacher">Tout cacher</button></div>
+</div>
+<div class="onglets" id="onglets"></div>
+<div id="reafficher" class="cache"></div>
+
+<main>
+
+<!-- ============ PRÉSENTATION ============ -->
+<section class="panneau" id="p-presentation" data-titre="Présentation">
+<h2>Présentation de la séquence</h2>
+
+<div class="rubriques" aria-label="Cadre de la séquence">
+<div><b>Thème</b>Les métamorphoses du moi : se peindre, se connaître, se perdre, devenir autre.</div>
+<div><b>Niveau</b>Terminale, spécialité Humanités, littérature et philosophie (HLP).</div>
+<div><b>Problématique</b>Le moi peut-il changer sans se perdre, et peut-on se connaître si l'on ne cesse de changer ?</div>
+<div><b>Objectifs</b>Lire des textes littéraires et philosophiques sur le moi ; s'entraîner à l'interprétation littéraire et à l'essai philosophique (épreuve HLP, chaque exercice sur 10) ; citer juste, problématiser, argumenter à l'oral.</div>
+<div><b>Ancrage culturel</b>Programme HLP terminale, BO spécial n° 8 du 25 juillet 2019 : « La recherche de soi », entrée « Les métamorphoses du moi » (romantisme au XXe siècle). Montaigne, Rousseau, Descartes, Pascal, Hume, Nerval, Rimbaud, Stevenson, Freud, Nietzsche, Proust, Locke.</div>
+</div>
+<figure class="illust"><img src="img/courbet.jpg" alt="" loading="lazy"><figcaption><strong>Ouverture : un visage qui se fixe lui-même, comme le moi en crise que la séquence va interroger.</strong>Gustave Courbet, <em>Le Désespéré</em>, vers 1843-1845 · domaine public</figcaption></figure><figure class="illust"><img src="img/rimbaud.jpg" alt="" loading="lazy"><figcaption><strong>Séance 4 / ouverture : le poète de « Je est un autre », formule-titre de la séquence.</strong>Étienne Carjat, <em>Portrait d'Arthur Rimbaud</em>, 1871-1872 · domaine public</figcaption></figure>
+<div class="meteo" id="meteo">
+<h3>Météo de la classe</h3>
+<p>Avant de commencer : comment vous sentez-vous face à cette séquence ?</p>
+<div class="choix" id="meteochoix">
+<button type="button" data-m="soleil">Soleil : prêt</button>
+<button type="button" data-m="nuage">Nuage : un peu perdu</button>
+<button type="button" data-m="pluie">Pluie : besoin d'aide</button>
+<button type="button" data-m="orage">Orage : bloqué</button>
+</div>
+<p id="meteofb" style="margin:8px 0 0;color:var(--gris)"></p>
+</div>
+
+<h3>Cadre officiel</h3>
+<p>Spécialité <strong>Humanités, littérature et philosophie</strong>, classe de terminale. Programme publié au <strong>BO spécial n° 8 du 25 juillet 2019</strong> (arrêté du 17 juillet 2019). Objet d'étude : <strong>« La recherche de soi »</strong>, période du romantisme au XXe siècle. Entrée : <strong>« Les métamorphoses du moi »</strong>.</p>
+<p>L'épreuve écrite dure 4 heures. Elle porte sur un texte et comporte deux questions : une <strong>interprétation</strong> et un <strong>essai</strong>, l'une littéraire, l'autre philosophique (l'ordre change selon les sujets).</p>
+
+<h3>Problématique</h3>
+<div class="carte"><strong>Le moi peut-il changer sans se perdre, et peut-on se connaître si l'on ne cesse de changer ?</strong></div>
+
+<h3>Objectifs</h3>
+<ul>
+<li>Lire de près des textes littéraires et philosophiques qui posent la question du moi.</li>
+<li>S'entraîner aux deux exercices du bac : interprétation et essai.</li>
+<li>Acquérir les réflexes utiles pour la suite des études littéraires : citer juste, définir les termes, problématiser, construire un plan dialectique, présenter un exposé oral argumenté.</li>
+</ul>
+
+<h3>Déroulé (environ 4 semaines)</h3>
+<table>
+<tr><th>Séance</th><th>Titre</th><th>Supports</th><th>Activité dominante</th></tr>
+<tr><td>1</td><td>Se peindre soi-même</td><td>Friedrich, Caravage, Montaigne « Au lecteur »</td><td>Lecture d'images, première réflexion</td></tr>
+<tr><td>2</td><td>« Moi seul »</td><td>Rousseau, <em>Confessions</em>, incipit</td><td>Méthode de l'interprétation littéraire</td></tr>
+<tr><td>3</td><td>Le moi existe-t-il ?</td><td>Descartes, Pascal, Hume</td><td>Méthode de l'essai philosophique</td></tr>
+<tr><td>4</td><td>« Je est un autre »</td><td>Nerval, Rimbaud</td><td>Explication de texte poétique</td></tr>
+<tr><td>5</td><td>Le double et l'inconscient</td><td>Stevenson, Freud, Nietzsche</td><td>Débat argumenté</td></tr>
+<tr><td>6</td><td>Mémoire et identité</td><td>Proust, Locke</td><td>Écriture d'invention réflexive</td></tr>
+<tr><td>7</td><td>Atelier oral et écrit</td><td>Exposé oral, dissertation, lectures</td><td>Oral blanc, introduction rédigée</td></tr>
+<tr><td>8</td><td>Évaluation sommative</td><td>Montaigne, « Du repentir »</td><td>Sujet type bac, 4 h</td></tr>
+</table>
+
+<div class="corrige"><div class="paire-rep" role="group" aria-label="Réponse"><button type="button" class="rep-on" aria-pressed="false">Afficher la réponse</button><button type="button" class="rep-off" aria-pressed="true">Cacher la réponse</button></div><div class="corr-body"><p class="prof-label" style="font-weight:700;color:#4f7a4a;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;margin:0 0 6px">Version professeur</p>
+<p><strong>Organisation conseillée.</strong> HLP se fait à deux voix : le professeur de lettres et celui de philosophie travaillent le même texte avec des outils différents. Si vous êtes seule, gardez les deux angles dans chaque séance : une question d'interprétation, une question de réflexion.</p>
+<p><strong>Évaluations prévues.</strong> Formatives en séances 2, 3 et 6 (corrigées ci-dessous). Oral en séance 7 avec grille. Sommative en séance 8 avec deux grilles sur 10 et éléments de corrigé.</p>
+</div></div>
+</section>
+
+<!-- ============ SÉANCE 1 ============ -->
+<section class="panneau" id="p-s1" data-titre="Séance 1">
+<h2>Séance 1 · Se peindre soi-même</h2>
+
+<h3>1. Regarder deux tableaux</h3>
+<p>Observez les deux tableaux en silence pendant deux minutes.</p>
+<div class="duo-art">
+<figure class="illust"><img src="img/friedrich.jpg" alt="" loading="lazy"><figcaption><strong>Séance 1 : le voyageur de dos, face au monde, illustre la question « peut-on se voir soi-même ? » posée juste après.</strong>Caspar David Friedrich, <em>Le Voyageur contemplant une mer de nuages</em>, vers 1818, Kunsthalle de Hambourg · domaine public</figcaption></figure><figure class="illust"><img src="img/narcisse.jpg" alt="" loading="lazy"><figcaption><strong>Séance 1 : Narcisse penché sur son reflet montre que se contempler n'est pas se connaître, comme le dit le corrigé.</strong>Le Caravage (attribué), <em>Narcisse</em>, vers 1597-1599, Galerie nationale d'art ancien, Rome · domaine public</figcaption></figure>
+</div>
+
+<p class="consigne">Questions</p>
+<ol>
+<li>Que voit-on du visage de chaque personnage ? Qu'en concluez-vous sur la connaissance de soi ?</li>
+<li>Le premier se cherche dans le monde, le second dans son reflet. Lequel des deux vous semble le plus près de se trouver ?</li>
+<li>Formulez en une phrase la question que ces tableaux posent ensemble.</li>
+</ol>
+
+<div class="corrige"><div class="paire-rep" role="group" aria-label="Réponse"><button type="button" class="rep-on" aria-pressed="false">Afficher la réponse</button><button type="button" class="rep-off" aria-pressed="true">Cacher la réponse</button></div><div class="corr-body"><p class="prof-label" style="font-weight:700;color:#4f7a4a;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;margin:0 0 6px">Version professeur</p>
+<p><strong>Pistes.</strong> Le voyageur est de dos : nous ne voyons jamais son visage, il reste une énigme pour nous comme peut-être pour lui. C'est l'image romantique du moi qui se projette dans le paysage. Narcisse ne voit que son reflet, et le tableau se referme en cercle sur lui : se contempler n'est pas se connaître, c'est risquer de se perdre (Narcisse meurt).</p>
+<p><strong>Question attendue.</strong> « Peut-on se voir soi-même ? » ou « Faut-il se regarder pour se connaître ? »</p>
+</div></div>
+
+<h3>2. Lire Montaigne</h3>
+<figure class="illust"><img src="img/montaigne.jpg" alt="" loading="lazy"><figcaption><strong>Séance 1 : le peintre du moi avant la lecture de « Au lecteur » (« c'est moi que je peins »).</strong>Portrait présumé de Michel de Montaigne, vers 1578, musée Condé · domaine public</figcaption></figure>
+<div class="texte">
+C'est ici un livre de bonne foi, lecteur. […] Je veux qu'on m'y voie en ma façon simple, naturelle et ordinaire, sans contention et artifice : car c'est moi que je peins. […] Ainsi, lecteur, je suis moi-même la matière de mon livre.
+<span class="source">Montaigne, <em>Essais</em>, « Au lecteur », 1580 (orthographe modernisée)</span>
+</div>
+<p class="consigne">Questions</p>
+<ol>
+<li>Relevez le vocabulaire de la peinture. Pourquoi Montaigne parle-t-il de « peindre » plutôt que d'« écrire » ?</li>
+<li>Que signifie « sans contention et artifice » ? Est-ce possible quand on écrit sur soi ?</li>
+<li>Montaigne est périgourdin, ami de La Boétie. En quoi l'amitié peut-elle aider à se connaître ?</li>
+</ol>
+<div class="corrige"><div class="paire-rep" role="group" aria-label="Réponse"><button type="button" class="rep-on" aria-pressed="false">Afficher la réponse</button><button type="button" class="rep-off" aria-pressed="true">Cacher la réponse</button></div><div class="corr-body"><p class="prof-label" style="font-weight:700;color:#4f7a4a;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;margin:0 0 6px">Version professeur</p>
+<p><strong>Pistes.</strong> « Peindre » insiste sur le portrait fidèle, mais tout portrait est une composition : c'est le paradoxe de l'écriture de soi. « Contention » signifie effort, tension. La sincérité totale est un idéal, pas une évidence. Pour la question 3, on peut rappeler le mot célèbre sur l'amitié (« parce que c'était lui, parce que c'était moi ») : l'autre est un miroir plus fiable que l'eau de Narcisse.</p>
+<p><strong>Trace écrite.</strong> Le moi devient au XVIe siècle un objet d'écriture. Les romantiques en feront un objet d'exploration, le XXe siècle un objet de soupçon.</p>
+</div></div>
+<p>La même quête passe par l'autoportrait peint : Rembrandt, toute sa vie, se peint pour se voir changer.</p>
+<figure class="illust"><img src="img/rembrandt.jpg" alt="" loading="lazy"><figcaption><strong>Séance 1 : après Montaigne, l'autoportrait comme autre façon de « se peindre » pour chercher le moi.</strong>Rembrandt, <em>Autoportrait</em>, 1633 · domaine public (Google Art Project)</figcaption></figure>
+<div class="pont">
+<p>Dans les études de lettres, on vous demandera souvent de situer un texte dans une <strong>histoire longue</strong>. Prenez l'habitude de noter, pour chaque auteur, sa date et une phrase qui résume sa conception du moi. Vous construirez ainsi votre propre frise.</p>
+</div>
+</section>
+
+<!-- ============ SÉANCE 2 ============ -->
+<section class="panneau" id="p-s2" data-titre="Séance 2">
+<h2>Séance 2 · « Moi seul » : Rousseau</h2>
+<figure class="illust"><img src="img/rousseau.jpg" alt="" loading="lazy"><figcaption><strong>Séance 2 : le visage de l'auteur des <em>Confessions</em>, juste avant « Moi seul ».</strong>Allan Ramsay, <em>Portrait de Jean-Jacques Rousseau</em>, 1766, National Gallery of Scotland · domaine public</figcaption></figure>
+<div class="texte">
+Je forme une entreprise qui n'eut jamais d'exemple et dont l'exécution n'aura point d'imitateur. Je veux montrer à mes semblables un homme dans toute la vérité de la nature ; et cet homme, ce sera moi.<br>
+Moi seul. Je sens mon cœur et je connais les hommes. Je ne suis fait comme aucun de ceux que j'ai vus ; j'ose croire n'être fait comme aucun de ceux qui existent. Si je ne vaux pas mieux, au moins je suis autre. Si la nature a bien ou mal fait de briser le moule dans lequel elle m'a jeté, c'est ce dont on ne peut juger qu'après m'avoir lu.
+<span class="source">Jean-Jacques Rousseau, <em>Les Confessions</em>, livre I, rédigé à partir de 1765, publié en 1782</span>
+</div>
+
+<h3>1. Lecture analytique</h3>
+<ol>
+<li>Comptez les pronoms de la première personne. Quel effet produit leur accumulation ?</li>
+<li>Comment Rousseau affirme-t-il à la fois son <strong>unicité</strong> et sa <strong>ressemblance</strong> avec les autres hommes ?</li>
+<li>Expliquez l'image du « moule » brisé.</li>
+<li>Comparez avec Montaigne : qu'est-ce qui a changé dans le ton ?</li>
+</ol>
+
+<h3>2. Méthode : l'interprétation littéraire</h3>
+<div class="carte">
+<p><strong>Ce qu'on attend.</strong> Une réponse construite à une question précise sur le texte, appuyée sur des citations analysées.</p>
+<p><strong>Introduction.</strong> Présenter le texte, reformuler la question, annoncer deux ou trois axes.</p>
+<p><strong>Développement.</strong> Chaque axe : une idée, des citations courtes, une analyse des procédés (énonciation, images, rythme, lexique).</p>
+<p><strong>Conclusion.</strong> Répondre clairement à la question, ouvrir sur un autre texte.</p>
+</div>
+
+<h3>3. Exercice formatif</h3>
+<p class="consigne">Rédigez l'introduction et le premier axe de la réponse à la question : « Comment Rousseau fait-il de sa singularité la justification de son livre ? »</p>
+
+<div class="corrige"><div class="paire-rep" role="group" aria-label="Réponse"><button type="button" class="rep-on" aria-pressed="false">Afficher la réponse</button><button type="button" class="rep-off" aria-pressed="true">Cacher la réponse</button></div><div class="corr-body"><p class="prof-label" style="font-weight:700;color:#4f7a4a;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;margin:0 0 6px">Version professeur</p>
+<p><strong>Éléments de corrigé.</strong></p>
+<p><strong>Axe 1 : un moi qui se proclame unique.</strong> Phrase nominale isolée « Moi seul », effet de détachement. Gradation « aucun de ceux que j'ai vus » puis « aucun de ceux qui existent ». Hyperbole de l'entreprise « qui n'eut jamais d'exemple ».</p>
+<p><strong>Axe 2 : un moi offert en exemple.</strong> « Mes semblables », « un homme dans toute la vérité de la nature » : le particulier vaut pour l'universel. Paradoxe : l'homme le plus singulier devient le modèle de l'homme naturel.</p>
+<p><strong>Axe 3 : un pacte avec le lecteur.</strong> Le jugement est différé (« qu'après m'avoir lu ») : le lecteur devient juge, le livre devient un procès.</p>
+<p><strong>Barème formatif sur 10.</strong> Introduction complète : 3. Axe pertinent : 3. Citations intégrées et analysées : 3. Correction de la langue : 1.</p>
+</div></div>
+
+<div class="pont">
+<p>Au bac comme à l'université, une citation ne se « colle » pas : elle s'insère dans votre phrase et elle est suivie d'une analyse. Règle d'or : <strong>une citation, un procédé, un effet</strong>.</p>
+</div>
+</section>
+
+<!-- ============ SÉANCE 3 ============ -->
+<section class="panneau" id="p-s3" data-titre="Séance 3">
+<h2>Séance 3 · Le moi existe-t-il ?</h2>
+<figure class="illust"><img src="img/descartes.jpg" alt="" loading="lazy"><figcaption><strong>Séance 3 : le peintre du « je pense, donc je suis », face au texte des <em>Méditations</em>.</strong>Frans Hals (copie d'après), <em>Portrait de René Descartes</em>, vers 1649, musée du Louvre · domaine public</figcaption></figure>
+<h3>Texte A</h3>
+<div class="texte">
+Je suis, j'existe : cela est certain ; mais combien de temps ? À savoir, autant de temps que je pense. […] Mais qu'est-ce donc que je suis ? Une chose qui pense.
+<span class="source">René Descartes, <em>Méditations métaphysiques</em>, II, 1641 (traduction du duc de Luynes, 1647)</span>
+</div>
+
+<h3>Texte B</h3>
+<div class="texte">
+Mais celui qui aime quelqu'un à cause de sa beauté, l'aime-t-il ? Non : car la petite vérole, qui tuera la beauté sans tuer la personne, fera qu'il ne l'aimera plus. […] Où est donc ce moi, s'il n'est ni dans le corps, ni dans l'âme ? […] On n'aime donc jamais personne, mais seulement des qualités.
+<span class="source">Blaise Pascal, <em>Pensées</em>, fragment « Qu'est-ce que le moi ? », publication posthume, 1670</span>
+</div>
+
+<h3>Texte C</h3>
+<div class="texte">
+Pour ma part, quand j'entre au plus intime de ce que j'appelle moi, je tombe toujours sur une perception particulière : chaud ou froid, lumière ou ombre, amour ou haine, douleur ou plaisir. Je ne me saisis jamais moi-même sans une perception.
+<span class="source">David Hume, <em>Traité de la nature humaine</em>, I, IV, 6, 1739 (traduction de travail)</span>
+</div>
+
+<h3>1. Comprendre</h3>
+<ol>
+<li>Pour Descartes, qu'est-ce qui est certain ? À quelle condition ?</li>
+<li>Pascal cherche le moi dans le corps puis dans les qualités de l'âme. Que trouve-t-il ?</li>
+<li>Hume cherche le moi et ne trouve que des perceptions. Qu'en conclut-il, selon vous ?</li>
+<li>Classez ces trois positions : le moi est une substance, une énigme, une illusion.</li>
+</ol>
+
+<h3>2. Méthode : l'essai philosophique</h3>
+<div class="carte">
+<p><strong>Analyser le sujet.</strong> Définir chaque terme, repérer le présupposé, formuler le problème (une tension entre deux réponses possibles).</p>
+<p><strong>Construire.</strong> Un plan en deux ou trois parties qui avance : chaque partie répond aux limites de la précédente.</p>
+<p><strong>Nourrir.</strong> Des références précises (auteurs, œuvres, exemples tirés de la vie ou des arts), toujours expliquées.</p>
+</div>
+
+<h3>3. Exercice formatif</h3>
+<p class="consigne">Sujet : « Suis-je ce que je pense être ? » Rédigez l'analyse du sujet, la problématique et le plan détaillé.</p>
+
+<div class="corrige"><div class="paire-rep" role="group" aria-label="Réponse"><button type="button" class="rep-on" aria-pressed="false">Afficher la réponse</button><button type="button" class="rep-off" aria-pressed="true">Cacher la réponse</button></div><div class="corr-body"><p class="prof-label" style="font-weight:700;color:#4f7a4a;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;margin:0 0 6px">Version professeur</p>
+<p><strong>Réponses aux questions.</strong> 1. Mon existence comme chose pensante, tant que je pense. 2. Que le moi est insaisissable : on n'aime que des qualités empruntées. 3. Que le moi n'est qu'un « faisceau » de perceptions sans substance stable. 4. Substance : Descartes. Énigme : Pascal. Illusion ou fiction : Hume.</p>
+<p><strong>Corrigé possible de l'exercice.</strong></p>
+<p><strong>Problème.</strong> Penser être quelque chose semble suffire à l'être (Descartes), mais ce que je pense de moi peut être une image fausse ou flatteuse.</p>
+<p><strong>I.</strong> La conscience me donne un accès privilégié à moi-même : je suis une chose qui pense.<br><strong>II.</strong> Mais cette conscience est trompeuse : préjugés, amour-propre (Pascal), absence d'un moi stable (Hume), inconscient (séance 5).<br><strong>III.</strong> Je deviens moi en me racontant et en agissant : l'identité est une tâche plutôt qu'un donné (on pourra évoquer Ricœur et l'identité narrative).</p>
+<p><strong>Barème formatif sur 10.</strong> Définitions : 2. Problématique claire : 3. Plan progressif : 3. Références pertinentes : 2.</p>
+</div></div>
+
+<div class="pont">
+<p>Une bonne « définition » n'est jamais celle du dictionnaire seule. On distingue les sens du mot. Exemple : « moi » désigne le sujet qui dit je, la personnalité, l'image sociale, l'instance psychique chez Freud.</p>
+</div>
+</section>
+
+<!-- ============ SÉANCE 4 ============ -->
+<section class="panneau" id="p-s4" data-titre="Séance 4">
+<h2>Séance 4 · « Je est un autre »</h2>
+<figure class="illust"><img src="img/fantin.jpg" alt="" loading="lazy"><figcaption><strong>Séance 4 : Rimbaud (debout à gauche) parmi les poètes ; le « je » entre dans un cercle d'autres.</strong>Henri Fantin-Latour, <em>Un coin de table</em>, 1872, musée d'Orsay · domaine public</figcaption></figure>
+<h3>Texte A</h3>
+<div class="texte">
+Je suis le Ténébreux, le Veuf, l'Inconsolé,<br>
+Le Prince d'Aquitaine à la Tour abolie :<br>
+Ma seule Étoile est morte, et mon luth constellé<br>
+Porte le Soleil noir de la Mélancolie.
+<span class="source">Gérard de Nerval, « El Desdichado », <em>Les Chimères</em>, 1854, premier quatrain (ponctuation simplifiée)</span>
+</div>
+
+<h3>Texte B</h3>
+<div class="texte">
+Car Je est un autre. Si le cuivre s'éveille clairon, il n'y a rien de sa faute. […] Le Poète se fait voyant par un long, immense et raisonné dérèglement de tous les sens.
+<span class="source">Arthur Rimbaud, lettre à Paul Demeny, dite « Lettre du Voyant », 15 mai 1871</span>
+</div>
+
+<h3>1. Questions</h3>
+<ol>
+<li>Nerval : relevez les identités successives que s'attribue le « je ». Sont-elles compatibles ?</li>
+<li>Expliquez l'oxymore « Soleil noir ».</li>
+<li>Rimbaud : pourquoi la faute grammaticale « Je est » est-elle volontaire ? Que dit-elle ?</li>
+<li>Comparez avec Rousseau : le moi est-il encore « seul » ?</li>
+</ol>
+
+<div class="corrige"><div class="paire-rep" role="group" aria-label="Réponse"><button type="button" class="rep-on" aria-pressed="false">Afficher la réponse</button><button type="button" class="rep-off" aria-pressed="true">Cacher la réponse</button></div><div class="corr-body"><p class="prof-label" style="font-weight:700;color:#4f7a4a;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;margin:0 0 6px">Version professeur</p>
+<p><strong>Pistes.</strong> Nerval multiplie les masques (veuf, prince, figure mythique) : le moi est fait de rôles et de souvenirs, il se fragmente. L'oxymore dit la mélancolie comme lumière inversée, source de création. Chez Rimbaud, « Je » traité à la troisième personne devient un objet : le poète ne choisit pas ce qu'il est, comme le cuivre ne choisit pas de devenir clairon. Rousseau voulait se montrer « tout entier » ; Nerval et Rimbaud découvrent un moi pluriel et étranger à lui-même.</p>
+<p><strong>Prolongement possible.</strong> Pour la lecture à voix haute, faire travailler la diction du quatrain de Nerval (rythme 6/6, coupes).</p>
+</div></div>
+
+<h3>2. Atelier d'écriture</h3>
+<p class="consigne">À la manière de Nerval, écrivez quatre vers (ou quatre lignes de prose poétique) commençant par « Je suis », dans lesquels vous vous attribuez au moins trois identités différentes.</p>
+
+<div class="pont">
+<p>Lire la lettre du Voyant en entier (quelques pages) est un excellent exercice pour l'été avant les études supérieures. Notez les passages qui vous résistent : ce sont souvent ceux qui feront un bon sujet d'oral.</p>
+</div>
+</section>
+
+<!-- ============ SÉANCE 5 ============ -->
+<section class="panneau" id="p-s5" data-titre="Séance 5">
+<h2>Séance 5 · Le double et l'inconscient</h2>
+<figure class="illust"><img src="img/ensor.jpg" alt="" loading="lazy"><figcaption><strong>Séance 5 : les masques figurent le moi multiple et le double, au moment de Freud, Nietzsche et Jekyll.</strong>James Ensor, <em>Théâtre de masques</em>, 1908, Museo Thyssen-Bornemisza · domaine public</figcaption></figure>
+<h3>Texte A</h3>
+<div class="texte">
+I learned to recognise the thorough and primitive duality of man; […] man is not truly one, but truly two.
+<span class="source">Robert Louis Stevenson, <em>Strange Case of Dr Jekyll and Mr Hyde</em>, 1886, chapitre 10 (en anglais, langue originale)</span>
+</div>
+<p><em>Traduction de travail :</em> j'appris à reconnaître la dualité profonde et primitive de l'homme ; l'homme n'est pas véritablement un, mais véritablement deux.</p>
+
+<h3>Texte B</h3>
+<p>Dans un article de 1917, <strong>Freud</strong> explique que l'humanité a subi trois blessures d'amour-propre. Copernic a montré que la Terre n'est pas le centre de l'univers. Darwin a montré que l'homme descend de l'animal. La psychanalyse montre que <strong>le moi n'est pas maître dans sa propre maison</strong> : une grande part de notre vie psychique nous échappe.</p>
+<p class="source" style="color:var(--gris);font-size:.88rem">Sigmund Freud, « Une difficulté de la psychanalyse », 1917 (résumé)</p>
+
+<h3>Texte C</h3>
+<p><strong>Nietzsche</strong>, dans <em>Par-delà bien et mal</em> (1886, § 17), remarque qu'une pensée vient quand « elle » veut, et non quand « je » veux. Dire « je pense » serait une habitude de grammaire plutôt qu'une certitude.</p>
+
+<h3>1. Débat argumenté</h3>
+<p class="consigne">Question : « Sommes-nous responsables de ce que nous ne connaissons pas en nous ? »</p>
+<p>La classe se partage en deux groupes. Chaque groupe prépare trois arguments et un exemple tiré d'une œuvre (roman, film, série, tableau). Deux élèves observateurs notent les meilleurs arguments.</p>
+
+<div class="corrige"><div class="paire-rep" role="group" aria-label="Réponse"><button type="button" class="rep-on" aria-pressed="false">Afficher la réponse</button><button type="button" class="rep-off" aria-pressed="true">Cacher la réponse</button></div><div class="corr-body"><p class="prof-label" style="font-weight:700;color:#4f7a4a;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;margin:0 0 6px">Version professeur</p>
+<p><strong>Arguments attendus.</strong></p>
+<p><strong>Non.</strong> Si le moi n'est pas maître chez lui (Freud), si la pensée vient « quand elle veut » (Nietzsche), alors certaines actions nous échappent. Jekyll lui-même dit que Hyde n'est pas lui.</p>
+<p><strong>Oui.</strong> Jekyll a choisi de boire la potion : il a libéré ce qu'il connaissait déjà. Reconnaître l'inconscient n'efface pas la responsabilité, cela oblige à se connaître davantage (c'est le but même de la cure analytique).</p>
+<p><strong>Lien Descartes.</strong> Revenir à la séance 3 : la transparence du cogito est mise en doute.</p>
+</div></div>
+
+<div class="pont">
+<p>Le travail sur un texte en langue étrangère est un atout pour la suite (langues, littérature comparée). Lisez quelques pages de Stevenson en anglais : la langue est accessible et le récit très court.</p>
+</div>
+</section>
+
+<!-- ============ SÉANCE 6 ============ -->
+<section class="panneau" id="p-s6" data-titre="Séance 6">
+<h2>Séance 6 · Mémoire et identité</h2>
+
+<div class="texte">
+Et tout d'un coup le souvenir m'est apparu. Ce goût, c'était celui du petit morceau de madeleine que le dimanche matin à Combray […] ma tante Léonie m'offrait après l'avoir trempé dans son infusion de thé ou de tilleul.
+<span class="source">Marcel Proust, <em>Du côté de chez Swann</em>, 1913</span>
+</div>
+
+<h3>Repère philosophique</h3>
+<p><strong>John Locke</strong> (<em>Essai sur l'entendement humain</em>, 1690, II, 27) propose une thèse simple : une personne reste la même tant que sa conscience peut rejoindre, par la mémoire, ses pensées et ses actions passées. Mon identité s'étend aussi loin que ma mémoire.</p>
+
+<h3>1. Questions</h3>
+<ol>
+<li>Le souvenir de Proust est-il volontaire ? Qu'est-ce qui le déclenche ?</li>
+<li>Que retrouve le narrateur en même temps que le souvenir ?</li>
+<li>Si l'identité tient à la mémoire (Locke), que devient une personne qui oublie ?</li>
+</ol>
+
+<h3>2. Exercice formatif : écriture réflexive</h3>
+<p class="consigne">En une page, racontez un souvenir déclenché par une sensation (odeur, goût, musique), puis expliquez en un paragraphe ce que ce souvenir vous apprend sur la personne que vous étiez et celle que vous êtes devenue.</p>
+
+<div class="corrige"><div class="paire-rep" role="group" aria-label="Réponse"><button type="button" class="rep-on" aria-pressed="false">Afficher la réponse</button><button type="button" class="rep-off" aria-pressed="true">Cacher la réponse</button></div><div class="corr-body"><p class="prof-label" style="font-weight:700;color:#4f7a4a;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;margin:0 0 6px">Version professeur</p>
+<p><strong>Réponses.</strong> 1. Non : c'est la mémoire involontaire, déclenchée par une sensation. 2. Tout un monde (Combray) et un moi ancien qu'il croyait perdu. 3. Discussion : la thèse de Locke rend l'identité fragile (maladie, oubli). On peut objecter que les autres, le corps, les récits gardent aussi notre identité.</p>
+<p><strong>Grille sur 10.</strong> Récit précis et sensoriel : 3. Passage du récit à la réflexion : 3. Lien explicite avec Proust ou Locke : 2. Langue : 2.</p>
+</div></div>
+
+<div class="pont">
+<p>Proust est un auteur que l'on croise partout dans les études de lettres. Commencez par <em>Combray</em> (première partie de <em>Du côté de chez Swann</em>) : c'est l'entrée la plus douce dans <em>À la recherche du temps perdu</em>.</p>
+</div>
+</section>
+
+<!-- ============ ATELIER ============ -->
+<section class="panneau" id="p-atelier" data-titre="Atelier oral et écrit">
+<h2>Séance 7 · Atelier oral et écrit</h2>
+
+<h3>1. L'exposé oral</h3>
+<div class="carte">
+<p><strong>Principe.</strong> Un sujet tiré au sort, un temps de préparation, un exposé devant le professeur, puis un échange. C'est aussi un bon entraînement pour le Grand oral.</p>
+<p><strong>Format en classe.</strong> 30 minutes de préparation, 10 minutes d'exposé, 5 minutes de questions.</p>
+</div>
+<p class="consigne">Sujets au choix (tirage au sort)</p>
+<ol>
+<li>« Je est un autre. » Commentez cette formule de Rimbaud.</li>
+<li>Peut-on être sincère quand on parle de soi ?</li>
+<li>Changer, est-ce se trahir ?</li>
+<li>Le moi est-il haïssable ?</li>
+</ol>
+
+<div class="corrige"><div class="paire-rep" role="group" aria-label="Réponse"><button type="button" class="rep-on" aria-pressed="false">Afficher la réponse</button><button type="button" class="rep-off" aria-pressed="true">Cacher la réponse</button></div><div class="corr-body"><p class="prof-label" style="font-weight:700;color:#4f7a4a;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;margin:0 0 6px">Version professeur</p>
+<p><strong>Grille de l'exposé oral sur 20.</strong></p>
+<table>
+<tr><th>Critère</th><th>Points</th></tr>
+<tr><td>Introduction : sujet défini, problème posé, plan annoncé</td><td>4</td></tr>
+<tr><td>Progression logique de l'exposé</td><td>5</td></tr>
+<tr><td>Références précises et expliquées</td><td>4</td></tr>
+<tr><td>Expression orale : voix, regard, gestion du temps, détachement des notes</td><td>4</td></tr>
+<tr><td>Réactivité lors de l'échange</td><td>3</td></tr>
+</table>
+</div></div>
+
+<h3>2. Rédiger une introduction de dissertation</h3>
+<div class="carte">
+<p><strong>Les cinq temps.</strong> Une accroche (citation, exemple, situation). Le sujet cité. L'analyse des termes. La problématique. L'annonce du plan.</p>
+</div>
+<p class="consigne">Rédigez l'introduction complète du sujet n° 3 : « Changer, est-ce se trahir ? »</p>
+
+<div class="corrige"><div class="paire-rep" role="group" aria-label="Réponse"><button type="button" class="rep-on" aria-pressed="false">Afficher la réponse</button><button type="button" class="rep-off" aria-pressed="true">Cacher la réponse</button></div><div class="corr-body"><p class="prof-label" style="font-weight:700;color:#4f7a4a;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;margin:0 0 6px">Version professeur</p>
+<p><strong>Proposition de corrigé.</strong></p>
+<p>Dans les <em>Essais</em>, Montaigne avoue qu'il ne peint pas « l'être » mais « le passage ». Il fait du changement la vérité même de son portrait. On reproche pourtant volontiers à quelqu'un d'avoir « changé », comme s'il avait renié ce qu'il était. Changer, est-ce alors se trahir ? Changer, c'est devenir autre dans ses idées, ses goûts, son caractère ; se trahir, c'est être infidèle à soi, comme à une parole donnée. La question suppose qu'il existe un moi premier auquel on devrait rester fidèle. Mais si le moi n'est jamais fixe, à qui serait-on infidèle ? Nous verrons d'abord que le changement peut menacer l'identité, puis que le moi se construit au contraire dans ses métamorphoses, avant de montrer que la fidélité à soi est moins une immobilité qu'une promesse tenue.</p>
+</div></div>
+
+<h3>3. Lectures conseillées pour l'été</h3>
+<table>
+<tr><th>Œuvre</th><th>Pourquoi la lire</th></tr>
+<tr><td>Montaigne, <em>Essais</em>, livre III (choix de chapitres)</td><td>La source de toute écriture de soi</td></tr>
+<tr><td>Rousseau, <em>Les Rêveries du promeneur solitaire</em></td><td>Court, beau, au programme de nombreux concours</td></tr>
+<tr><td>Stendhal, <em>Le Rouge et le Noir</em></td><td>Un moi qui se fabrique par ambition</td></tr>
+<tr><td>Baudelaire, <em>Les Fleurs du mal</em></td><td>Le spleen, la mélancolie, la modernité</td></tr>
+<tr><td>Stevenson, <em>Jekyll and Hyde</em></td><td>Court, en anglais ou en français</td></tr>
+<tr><td>Proust, <em>Combray</em></td><td>La mémoire involontaire</td></tr>
+<tr><td>Sartre, <em>Les Mots</em></td><td>Une autobiographie qui démonte le mythe de l'enfance</td></tr>
+<tr><td>Annie Ernaux, <em>Les Années</em></td><td>Un moi raconté à travers une époque</td></tr>
+</table>
+
+<div class="pont">
+<p>Tenez un <strong>carnet de lectures</strong> : pour chaque œuvre, l'auteur, la date, trois citations courtes et une idée. C'est ce carnet, plus qu'un manuel, qui vous servira dans vos études.</p>
+</div>
+</section>
+
+<!-- ============ ÉVALUATION ============ -->
+<section class="panneau" id="p-eval" data-titre="Évaluation sommative">
+<h2>Séance 8 · Évaluation sommative (type bac, 4 heures)</h2>
+
+<div class="texte">
+Les autres forment l'homme ; je le récite et en représente un particulier bien mal formé, et lequel, si j'avais à façonner de nouveau, je ferais vraiment bien autre qu'il n'est. Meshui, c'est fait. Or les traits de ma peinture ne fourvoient point, quoiqu'ils se changent et diversifient. Le monde n'est qu'une branloire pérenne. Toutes choses y branlent sans cesse : la terre, les rochers du Caucase, les pyramides d'Égypte, et du branle public et du leur. La constance même n'est autre chose qu'un branle plus languissant. Je ne puis assurer mon objet. Il va trouble et chancelant, d'une ivresse naturelle. Je le prends en ce point, comme il est, en l'instant que je m'amuse à lui. Je ne peins pas l'être. Je peins le passage : non un passage d'âge en autre, ou, comme dit le peuple, de sept en sept ans, mais de jour en jour, de minute en minute. Il faut accommoder mon histoire à l'heure.
+<span class="source">Montaigne, <em>Essais</em>, III, 2, « Du repentir », 1588 (orthographe modernisée)</span>
+</div>
+<p><em>Lexique :</em> « je le récite » : je le raconte · « meshui » : désormais · « ne fourvoient point » : ne s'égarent pas · « branloire pérenne » : balançoire perpétuelle, mouvement sans fin · « assurer » : fixer.</p>
+
+<div class="carte">
+<p><strong>Question 1 · Interprétation littéraire (10 points)</strong></p>
+<p>Comment Montaigne fait-il de l'instabilité du moi la matière même de son écriture ?</p>
+<p><strong>Question 2 · Essai philosophique (10 points)</strong></p>
+<p>Changer, est-ce cesser d'être soi ?</p>
+<p>Vous vous appuierez sur le texte, sur les lectures de la séquence et sur votre culture personnelle.</p>
+</div>
+
+<div class="corrige"><div class="paire-rep" role="group" aria-label="Réponse"><button type="button" class="rep-on" aria-pressed="false">Afficher la réponse</button><button type="button" class="rep-off" aria-pressed="true">Cacher la réponse</button></div><div class="corr-body"><p class="prof-label" style="font-weight:700;color:#4f7a4a;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;margin:0 0 6px">Version professeur</p>
+<h4>Éléments de corrigé · Question 1</h4>
+<p><strong>Axe 1 : un monde et un moi en mouvement.</strong> Champ lexical du mouvement (« branloire », « branlent », « branle », « chancelant », « passage »). Énumération des choses en apparence immobiles (rochers du Caucase, pyramides) : rien n'échappe au changement. Paradoxe : « la constance même » n'est qu'un mouvement ralenti.</p>
+<p><strong>Axe 2 : un portrait fidèle parce que mobile.</strong> Opposition « Les autres forment / je le récite » : Montaigne refuse de donner un modèle, il décrit. « Les traits de ma peinture ne fourvoient point » : la vérité du portrait tient à ce qu'il suit les variations. Antithèse finale « l'être / le passage », phrases brèves, rythme qui s'accélère (« de jour en jour, de minute en minute »).</p>
+<p><strong>Axe 3 : une écriture de l'instant.</strong> « En l'instant que je m'amuse à lui » : écrire, c'est saisir le moi au présent. « Accommoder mon histoire à l'heure » : la forme de l'essai (essayer, reprendre, corriger) épouse l'objet.</p>
+
+<h4>Éléments de corrigé · Question 2</h4>
+<p><strong>Problème.</strong> Être soi semble supposer une permanence ; or tout change en moi (Montaigne, Hume). Si changer était cesser d'être soi, personne ne serait jamais soi.</p>
+<p><strong>I. Le changement menace l'identité.</strong> Être le même, c'est demeurer. Exemples : la maladie, l'oubli (Locke), Jekyll qui devient Hyde.</p>
+<p><strong>II. Mais le moi n'est pas une chose fixe.</strong> Hume : un flux de perceptions. Montaigne : peindre le passage. Rimbaud : « Je est un autre ». Changer est la condition même de la vie du moi.</p>
+<p><strong>III. Rester soi en changeant.</strong> Le récit de soi relie les moments (Proust, identité narrative chez Ricœur). La fidélité à une promesse ou à des valeurs fait l'identité morale. On peut changer pour devenir davantage soi (émancipation, éducation).</p>
+
+<h4>Grille · Question 1 (interprétation littéraire, sur 10)</h4>
+<table>
+<tr><th>Critère</th><th>Points</th></tr>
+<tr><td>Compréhension du texte et de la question</td><td>2</td></tr>
+<tr><td>Construction de la réponse (introduction, axes, conclusion)</td><td>2</td></tr>
+<tr><td>Analyse précise des procédés, citations intégrées</td><td>4</td></tr>
+<tr><td>Mise en perspective (autres textes de la séquence)</td><td>1</td></tr>
+<tr><td>Qualité de la langue</td><td>1</td></tr>
+</table>
+
+<h4>Grille · Question 2 (essai philosophique, sur 10)</h4>
+<table>
+<tr><th>Critère</th><th>Points</th></tr>
+<tr><td>Analyse des termes et problématique</td><td>2</td></tr>
+<tr><td>Progression argumentative</td><td>3</td></tr>
+<tr><td>Références philosophiques et littéraires expliquées</td><td>2</td></tr>
+<tr><td>Exemples pertinents et usage du texte</td><td>2</td></tr>
+<tr><td>Qualité de la langue</td><td>1</td></tr>
+</table>
+</div></div>
+</section>
+
+<!-- ============ RESSOURCES ============ -->
+<section class="panneau" id="p-ressources" data-titre="Ressources">
+<h2>Ressources</h2>
+
+<h3>Œuvres de la séquence (déjà affichées dans les séances)</h3>
+<p>Friedrich et Narcisse (séance 1) · Montaigne et Rembrandt (séance 1) · Rousseau (séance 2) · Descartes (séance 3) · Fantin-Latour (séance 4) · Ensor (séance 5) · Courbet et Rimbaud (ouverture).</p>
+<figure class="illust"><img src="img/durer.jpg" alt="" loading="lazy"><figcaption><strong>Ressources : l'autoportrait de 1500, modèle de la peinture de soi avant Montaigne et Courbet.</strong>Albrecht Dürer, <em>Autoportrait</em>, 1500, Alte Pinakothek, Munich · domaine public</figcaption></figure>
+
+<h3>Vidéos (recherches prêtes)</h3>
+<ul>
+<li><a href="https://www.youtube.com/results?search_query=Montaigne+Du+repentir+je+peins+le+passage" target="_blank" rel="noopener">Montaigne, « Je peins le passage »</a></li>
+<li><a href="https://www.youtube.com/results?search_query=Rimbaud+lettre+du+voyant+Je+est+un+autre+explication" target="_blank" rel="noopener">Rimbaud, la lettre du Voyant</a></li>
+<li><a href="https://www.youtube.com/results?search_query=HLP+terminale+m%C3%A9tamorphoses+du+moi" target="_blank" rel="noopener">HLP terminale, les métamorphoses du moi</a></li>
+<li><a href="https://www.youtube.com/results?search_query=r%C3%A9ussir+un+expos%C3%A9+oral+lyc%C3%A9e+m%C3%A9thode" target="_blank" rel="noopener">Réussir un exposé oral</a></li>
+</ul>
+
+<h3>Textes officiels</h3>
+<ul>
+<li><a href="https://www.education.gouv.fr/bo/2026/Hebdo4/MENE2622659N" target="_blank" rel="noopener">Note de service sur l'épreuve terminale de HLP (BO spécial n° 4 du 17 septembre 2026)</a></li>
+</ul>
+</section>
+
+</main>
+<footer class="droits">
+<p>© 2026 Madame Carole Paoli Pompougnac · CC BY-NC-ND 4.0</p>
+<p>Images : Wikimedia Commons, domaine public (Friedrich, Caravage, Montaigne, Rembrandt, Ramsay/Rousseau, Hals/Descartes, Carjat/Rimbaud, Fantin-Latour, Courbet, Ensor, Dürer).</p>
+</footer>
+
+<script>
+(function(){
+  var panneaux=[].slice.call(document.querySelectorAll('section.panneau'));
+  var barre=document.getElementById('onglets');
+  var zoneReaff=document.getElementById('reafficher');
+  var caches={};
+  function store(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+  function lire(k){try{return localStorage.getItem(k)}catch(e){return null}}
+  try{caches=JSON.parse(lire('hlpmoi-caches')||'{}')}catch(e){caches={}}
+
+  function ouvrir(id){
+    panneaux.forEach(function(p){p.classList.toggle('visible',p.id===id)});
+    [].forEach.call(barre.children,function(o){o.classList.toggle('actif',o.dataset.id===id)});
+    store('hlpmoi-actif',id);
+    window.scrollTo(0,0);
+  }
+  function premierVisible(){
+    for(var i=0;i<panneaux.length;i++){if(!caches[panneaux[i].id])return panneaux[i].id}
+    return null;
+  }
+  function majReaff(){
+    zoneReaff.innerHTML='';
+    var ids=Object.keys(caches).filter(function(k){return caches[k]});
+    if(!ids.length){zoneReaff.classList.add('cache');return}
+    zoneReaff.classList.remove('cache');
+    zoneReaff.appendChild(document.createTextNode('Onglets cachés : '));
+    ids.forEach(function(id){
+      var p=document.getElementById(id);
+      var b=document.createElement('button');b.className='btn';b.textContent='+ '+p.dataset.titre;
+      b.onclick=function(){delete caches[id];sauver();construire();ouvrir(id)};
+      zoneReaff.appendChild(b);
+    });
+  }
+  function sauver(){store('hlpmoi-caches',JSON.stringify(caches))}
+  function construire(){
+    barre.innerHTML='';
+    panneaux.forEach(function(p){
+      if(caches[p.id])return;
+      var o=document.createElement('div');o.className='onglet';o.dataset.id=p.id;
+      var b=document.createElement('button');b.className='ouvrir';b.textContent=p.dataset.titre;
+      b.onclick=function(){ouvrir(p.id)};
+      var f=document.createElement('button');f.className='fermer';f.title='Cacher cet onglet';f.textContent='×';
+      f.onclick=function(){
+        caches[p.id]=true;sauver();
+        var etaitActif=p.classList.contains('visible');
+        construire();
+        if(etaitActif){var n=premierVisible();if(n)ouvrir(n);else panneaux.forEach(function(x){x.classList.remove('visible')})}
+        else{var a=document.querySelector('section.panneau.visible');if(a)ouvrir(a.id)}
+      };
+      o.appendChild(b);o.appendChild(f);barre.appendChild(o);
+    });
+    majReaff();
+  }
+  document.getElementById('toutAfficherOnglets').onclick=function(){caches={};sauver();construire();var a=document.querySelector('section.panneau.visible');ouvrir(a?a.id:panneaux[0].id)};
+  var bP=document.getElementById('bProf'),bE=document.getElementById('bEleve');
+  function mode(m){document.body.classList.toggle('eleve',m==='eleve');bP.classList.toggle('actif',m!=='eleve');bE.classList.toggle('actif',m==='eleve');store('hlpmoi-mode',m)}
+  bP.onclick=function(){mode('prof')};bE.onclick=function(){mode('eleve')};
+  construire();
+  mode(lire('hlpmoi-mode')||'prof');
+  var depart=lire('hlpmoi-actif');
+  if(!depart||caches[depart]||!document.getElementById(depart))depart=premierVisible();
+  if(depart)ouvrir(depart);
+
+document.querySelectorAll('.corrige').forEach(function(box){
+  var on=box.querySelector('.rep-on'), off=box.querySelector('.rep-off');
+  if(!on||!off) return;
+  function open(v){box.classList.toggle('ouvert',v);on.setAttribute('aria-pressed',v?'true':'false');off.setAttribute('aria-pressed',v?'false':'true')}
+  on.addEventListener('click',function(){open(true)});
+  off.addEventListener('click',function(){open(false)});
+});
+document.getElementById('toutAfficher').addEventListener('click',function(){
+  document.querySelectorAll('.corrige').forEach(function(b){b.classList.add('ouvert');var on=b.querySelector('.rep-on'),off=b.querySelector('.rep-off');if(on)on.setAttribute('aria-pressed','true');if(off)off.setAttribute('aria-pressed','false')});
+});
+document.getElementById('toutCacher').addEventListener('click',function(){
+  document.querySelectorAll('.corrige').forEach(function(b){b.classList.remove('ouvert');var on=b.querySelector('.rep-on'),off=b.querySelector('.rep-off');if(on)on.setAttribute('aria-pressed','false');if(off)off.setAttribute('aria-pressed','true')});
+});
+document.querySelectorAll('#meteochoix button').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('#meteochoix button').forEach(function(x){x.classList.remove('sel')});
+    b.classList.add('sel');
+    var msg={soleil:'Bien : avancez séance par séance.',nuage:'Relisez la problématique et regardez les deux tableaux de la séance 1.',pluie:'Ouvrez une réponse Afficher après avoir essayé.',orage:'Commencez par Montaigne « Au lecteur », une seule question.'};
+    document.getElementById('meteofb').textContent=msg[b.dataset.m]||'';
+  });
+});
+
+})();
+</script>
+</body>
+</html>
